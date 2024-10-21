@@ -1,24 +1,5 @@
 <script setup>
-const menuitems = [
-  {
-    title: "Features",
-    path: "#",
-  },
-  {
-    title: "Pricing",
-    path: "/pricing",
-  },
-  {
-    title: "About",
-    path: "/about",
-  },
-  {
-    title: "Contact",
-    path: "/contact",
-  },
-];
-
-const open = ref(false);
+const open = ref(false)
 </script>
 
 <template>
@@ -26,8 +7,8 @@ const open = ref(false);
     <header class="flex flex-col lg:flex-row justify-between items-center my-5">
       <div class="flex w-full lg:w-auto items-center justify-between">
         <a href="/" class="text-lg"
-          ><span class="font-bold text-slate-800">Nuxt</span
-          ><span class="text-slate-500">ship</span>
+          ><span class="font-bold text-slate-800">Quiz</span
+          ><span class="text-slate-500">Nuxt</span>
         </a>
         <div class="block lg:hidden">
           <button @click="open = !open" class="text-gray-800">
@@ -57,27 +38,23 @@ const open = ref(false);
         class="w-full lg:w-auto mt-2 lg:flex lg:mt-0"
         :class="{ block: open, hidden: !open }"
       >
-        <ul class="flex flex-col lg:flex-row lg:gap-3">
-          <li v-for="item of menuitems">
-            <a
-              :href="item.path"
-              class="flex lg:px-3 py-2 text-gray-600 hover:text-gray-900"
-            >
-              {{ item.title }}
-            </a>
-          </li>
-        </ul>
         <div class="lg:hidden flex items-center mt-3 gap-4">
-          <LandingLink href="#" styleName="muted" block size="md"
-            >Log in</LandingLink
-          >
-          <LandingLink href="#" size="md" block>Sign up</LandingLink>
+          <LandingLink href="createQuiz" styleName="muted" block size="md">
+            Create Quiz
+          </LandingLink>
+          <LandingLink href="Quizes" size="md" block>
+            Get started
+          </LandingLink>
         </div>
       </nav>
       <div>
         <div class="hidden lg:flex items-center gap-4">
-          <a href="#">Log in</a>
-          <LandingLink href="#" size="md">Sign up</LandingLink>
+          <a href="createQuiz">
+            Create Quiz
+          </a>
+          <LandingLink href="Quizes" size="md">
+            Get started
+          </LandingLink>
         </div>
       </div>
     </header>
