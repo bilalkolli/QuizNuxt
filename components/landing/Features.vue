@@ -1,52 +1,33 @@
 <script setup>
 const features = [
   {
-    title: "Bring Your Own Framework",
+    title: "Bring Your Own Knowledge",
     description:
-      "Build your site using Vue, web components, or just plain ol' HTML + JavaScript.",
-    icon: "bx:bxs-briefcase",
+      "Easily create quizzes for friends, family, or students. Choose your topics and add questions to engage and challenge their knowledge!",
+    icon: "bx:bxs-briefcase"
   },
   {
-    title: "100% Static HTML, No JS",
+    title: "Test Your Knowledge and Culture",
     description:
-      "Nuxt renders your entire page to static HTML, removing all JavaScript from your final build by default.",
-    icon: "bx:bxs-window-alt",
+      "Challenge yourself with interactive quizzes crafted by a community of contributors, ensuring diverse and engaging content.",
+    icon: "bx:bxs-user"
   },
   {
-    title: "On-Demand Components",
-    description:
-      "Need some JS? Nuxt can automatically hydrate interactive components when they become visible on the page.  ",
-    icon: "bx:bxs-data",
-  },
-  {
-    title: "Broad Integration",
-    description:
-      "Nuxt supports TypeScript, Scoped CSS, CSS Modules, Sass, Tailwind, Markdown, MDX, and any other npm packages.",
-    icon: "bx:bxs-bot",
-  },
-  {
-    title: "SEO Enabled",
-    description:
-      "Automatic sitemaps, RSS feeds, pagination and collections take the pain out of SEO and syndication. It just works!",
-    icon: "bx:bxs-file-find",
-  },
-  {
-    title: "Community",
-    description:
-      "Nuxt is an open source project powered by hundreds of contributors making thousands of individual contributions.",
-    icon: "bx:bxs-user",
-  },
-];
+  title: "On-Demand Quiz Components",
+  description:
+    "Need interactivity? QuizNuxt automatically activates quiz components when they are visible, ensuring smooth performance and an engaging experience for users.",
+  icon: "bx:bxs-data"
+  }
+]
 </script>
 
 <template>
   <div class="mt-16 md:mt-0">
     <h2 class="text-4xl lg:text-5xl font-bold lg:tracking-tight">
-      Everything you need to start a website
+      Everything You Need for an Engaging Quiz Experience
     </h2>
     <p class="text-lg mt-4 text-slate-600">
-      Nuxt comes batteries included. It takes the best parts of state-of-the-art
-      tools and adds its own innovations.
+      Nuxt Powers Your Quiz: Combining Top Tools with Innovative Features
     </p>
   </div>
 
