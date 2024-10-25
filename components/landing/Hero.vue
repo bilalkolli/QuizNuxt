@@ -9,8 +9,7 @@
       </p>
       <div class="mt-6 flex flex-col sm:flex-row gap-3 justify-center">
         <LandingLink
-          href="https://github.com/Gr33nW33n/nuxtship-template"
-          target="_blank"
+          href="/Quizes"
           rel="noopener"
         >
         Get Started
@@ -19,8 +18,7 @@
           size="lg"
           styleName="outline"
           rel="noopener"
-          href="https://github.com/Gr33nW33n/nuxtship-template"
-          target="_blank"
+          href="/createQuiz"
         >
           Create Quiz</LandingLink>
       </div>

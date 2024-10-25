@@ -7,7 +7,7 @@
       QuizNuxt is your choice of knowledge improvement.
     </p>
     <div class="flex mt-5">
-      <LandingLink href="#" styleName="inverted">Get Started</LandingLink>
+      <LandingLink href="/Quizes" styleName="inverted">Get Started</LandingLink>
     </div>
   </div>
 </template>

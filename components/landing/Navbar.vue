@@ -39,20 +39,20 @@ const open = ref(false)
         :class="{ block: open, hidden: !open }"
       >
         <div class="lg:hidden flex items-center mt-3 gap-4">
-          <LandingLink href="createQuiz" styleName="muted" block size="md">
+          <LandingLink href="/createQuiz" styleName="muted" block size="md">
             Create Quiz
           </LandingLink>
-          <LandingLink href="Quizes" size="md" block>
+          <LandingLink href="/Quizes" size="md" block>
             Get started
           </LandingLink>
         </div>
       </nav>
       <div>
         <div class="hidden lg:flex items-center gap-4">
-          <a href="createQuiz">
+          <a href="/createQuiz">
             Create Quiz
           </a>
-          <LandingLink href="Quizes" size="md">
+          <LandingLink href="/Quizes" size="md">
             Get started
           </LandingLink>
         </div>
