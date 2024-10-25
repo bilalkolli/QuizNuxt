@@ -1,134 +1,148 @@
 <script setup>
-onMounted(() => {
-  const form = document.getElementById("form");
-  const result = document.getElementById("result");
+import { ref, watch } from 'vue';
 
-  form.addEventListener("submit", function (e) {
-    e.preventDefault();
-    form.classList.add("was-validated");
-    if (!form.checkValidity()) {
-      form.querySelectorAll(":invalid")[0].focus();
-      return;
-    }
-    const formData = new FormData(form);
-    const object = Object.fromEntries(formData);
-    const json = JSON.stringify(object);
+const name = ref('')
+const category = ref('')
+const questionsCount = ref(null)
+const difficulty = ref('')
+const quiz = ref([{ question: '', rightAnswer: '', wrongAnswers: ['', ''] }])
+const successMessage = ref('')
+const showPopup = ref(false)
 
-    result.innerHTML = "Sending...";
+watch(questionsCount, (newCount) => {
+  quiz.value = Array.from({ length: newCount }, (_, index) => ({
+    question: '',
+    rightAnswer: '',
+    wrongAnswers: ['', '']
+  }))
+})
 
-    fetch("https://api.web3forms.com/submit", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-      },
-      body: json,
+async function handleFormSubmit() {
+  const quizData = {
+    author: name.value,
+    category: category.value,
+    level: difficulty.value,
+    questions: quiz.value.map(q => ({
+      question: q.question,
+      rightAnswer: q.rightAnswer,
+      wrongAnswers: q.wrongAnswers
+    }))
+  }
+
+  try {
+    const res = await $fetch('/api/CreateQuiz', {
+      method: 'POST',
+      body: quizData
     })
-      .then(async (response) => {
-        let json = await response.json();
-        if (response.status == 200) {
-          result.classList.add("text-green-500");
-          result.innerHTML = json.message;
-        } else {
-          console.log(response);
-          result.classList.add("text-red-500");
-          result.innerHTML = json.message;
-        }
-      })
-      .catch((error) => {
-        console.log(error);
-        result.innerHTML = "Something went wrong!";
-      })
-      .then(function () {
-        form.reset();
-        form.classList.remove("was-validated");
-        setTimeout(() => {
-          result.style.display = "none";
-        }, 5000);
-      });
-  });
-});
+    successMessage.value = `Quiz créé avec succès ! Cliquez ici pour le voir : 
+      <a href="/quiz/${res.id}" class="text-blue-600 underline">Voir le Quiz</a>`;
+    showPopup.value = true
+  } catch (error) {
+    console.error('Erreur lors de la création du quiz :', error)
+  }
+}
+
+function closePopup() {
+  showPopup.value = false
+}
 </script>
 
 <template>
-  <!-- To make this contact form work, create your free access key from https://web3forms.com/
-     Then you will get all form submissions in your email inbox. -->
-  <form
-    action="https://api.web3forms.com/submit"
-    method="POST"
-    id="form"
-    class="needs-validation"
-    novalidate
-  >
-    <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE" />
-    <!-- Create your free access key from https://web3forms.com/ -->
-    <input
-      type="checkbox"
-      class="hidden"
-      style="display: none"
-      name="botcheck"
-    />
+  <form @submit.prevent="handleFormSubmit" class="max-w-lg mx-auto bg-white p-6 rounded-lg shadow-lg">
+    <h2 class="text-2xl font-bold mb-6 text-center">Create Your Quiz</h2>
+    
     <div class="mb-5">
       <input
+        v-model="name"
         type="text"
-        placeholder="Full Name"
+        placeholder="Name"
         required
-        class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
-        name="name"
+        class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-blue-600 ring-gray-100"
       />
-      <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
-        Please provide your full name.
-      </div>
     </div>
+
     <div class="mb-5">
-      <label for="email_address" class="sr-only">Email Address</label
-      ><input
-        id="email_address"
-        type="email"
-        placeholder="Email Address"
-        name="email"
+      <select v-model="difficulty" id="difficulty" class="w-full px-4 py-3 border-2 rounded-md">
+        <option class="text-gray-600" value="" disabled selected hidden>Level</option>
+        <option value="Easy">Easy</option>
+        <option value="Medium">Medium</option>
+        <option value="Hard">Hard</option>
+      </select>
+    </div>
+
+    <div class="mb-5">
+      <input
+        v-model="category"
+        type="text"
+        placeholder="Category"
         required
-        class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
+        class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-blue-600 ring-gray-100"
       />
-      <div class="empty-feedback text-red-400 text-sm mt-1">
-        Please provide your email address.
-      </div>
-      <div class="invalid-feedback text-red-400 text-sm mt-1">
-        Please provide a valid email address.
-      </div>
     </div>
-    <div class="mb-3">
-      <textarea
-        name="message"
+
+    <div class="mb-5">
+      <input
+        v-model.number="questionsCount"
+        type="number"
+        placeholder="Number of questions"
         required
-        placeholder="Your Message"
-        class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none h-36 focus:ring-4 border-gray-300 focus:border-gray-600 ring-gray-100"
-      ></textarea>
-      <div class="empty-feedback invalid-feedback text-red-400 text-sm mt-1">
-        Please enter your message.
+        min="1"
+        max="5"
+        class="w-full px-4 py-3 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-blue-600 ring-gray-100"
+      />
+    </div>
+
+    <div class="mb-5">
+      <div v-for="(questionObj, index) in quiz" v-if="questionsCount" :key="index" class="mb-6 p-4 border rounded-md bg-gray-50 shadow-md">
+        <label class="block mb-2 font-medium">{{ index + 1 }}.</label>
+        <input
+          v-model="questionObj.question"
+          type="text"
+          placeholder="Type your question here"
+          required
+          class="w-full mb-2 px-4 py-2 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-blue-600 ring-gray-100"
+        />
+        <input
+          v-model="questionObj.rightAnswer"
+          type="text"
+          placeholder="Type the right answer"
+          required
+          class="w-full mb-2 px-4 py-2 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-blue-600 ring-gray-100"
+        />
+        <input
+          v-model="questionObj.wrongAnswers[0]"
+          type="text"
+          placeholder="Type a wrong answer"
+          required
+          class="w-full mb-2 px-4 py-2 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-blue-600 ring-gray-100"
+        />
+        <input
+          v-model="questionObj.wrongAnswers[1]"
+          type="text"
+          placeholder="Type a wrong answer"
+          required
+          class="w-full mb-2 px-4 py-2 border-2 placeholder:text-gray-800 rounded-md outline-none focus:ring-4 border-gray-300 focus:border-blue-600 ring-gray-100"
+        />
       </div>
     </div>
-    <LandingButton type="submit" size="lg" block>Send Message</LandingButton>
-    <div id="result" class="mt-3 text-center"></div>
+    
+    <LandingButton type="submit" size="lg" block>Create Your Quiz</LandingButton>
+
+    <!-- Popup -->
+    <div v-if="showPopup" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+      <div class="bg-white rounded-lg shadow-lg p-6 w-11/12 max-w-md">
+        <h3 class="text-xl font-bold mb-4">Quiz Created!</h3>
+        <div class="mb-4" v-html="successMessage"></div>
+        <button @click="closePopup" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
+          Close
+        </button>
+      </div>
+    </div>
   </form>
 </template>
 
-<style>
-.invalid-feedback,
-.empty-feedback {
-  display: none;
-}
-
-.was-validated :placeholder-shown:invalid ~ .empty-feedback {
-  display: block;
-}
-
-.was-validated :not(:placeholder-shown):invalid ~ .invalid-feedback {
-  display: block;
-}
-
-.is-invalid,
-.was-validated :invalid {
-  border-color: #dc3545;
+<style scoped>
+.error {
+  color: red
 }
 </style>
