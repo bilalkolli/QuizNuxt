@@ -5,11 +5,17 @@
       <template v-slot:desc>Try to answer all the questions!</template>
     </LandingSectionhead>
 
-    <div v-if="error" class="text-red-500 text-center mt-4">{{ error }}</div>
-    <div v-else-if="!quiz" class="text-center mt-4">Loading...</div>
-    <div v-else>
+    <div>
       <h2 class="text-2xl font-bold mt-6 mb-4">Questions</h2>
-      <div v-for="question in quiz.questions" :key="question.id" class="bg-white shadow-lg rounded-lg p-4 mb-4">
+
+      <div v-if="status === 'pending'" v-for="index in 3" :key="index" class="bg-white shadow-lg rounded-lg p-4 mb-4">
+        <div class="p-2 h-8 w-1/3 bg-gray-300 rounded mb-5"></div>
+        <ul class="list-none pl-0 animate-pulse" v-for="index in 3">
+          <li :key="index" class="mb-2 p-3 h-2 w-1/5 bg-gray-300 rounded"></li>
+        </ul>
+      </div>
+
+      <div v-else v-for="question in quiz.questions" :key="question.id" class="bg-white shadow-lg rounded-lg p-4 mb-4">
         <h3 class="font-semibold text-lg mb-2">{{ question.question }}</h3>
         <ul class="list-none pl-0">
           <li
@@ -55,7 +61,7 @@ definePageMeta({
 })
 
 const route = useRoute()
-const { data: quiz, error } = await useFetch(`/api/get-Quiz-by-id/${route.params.id}`)
+const { data: quiz, status } = await useLazyFetch(`/api/get-Quiz-by-id/${route.params.id}`)
 
 const selectedAnswers = ref({})
 const score = ref(0)
