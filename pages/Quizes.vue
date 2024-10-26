@@ -10,6 +10,13 @@
         <h2 class="text-2xl lg:text-4xl lg:tracking-tight text-gray-800">{{ level.title }}</h2>
         <p class="text-lg italic mt-2 text-gray-600">{{ level.description }}</p>
 
+        <div v-if="status === 'pending'" class="mt-5 space-y-4">
+          <div class="flex items-center border border-neutral-300 bg-white p-4 rounded-lg shadow animate-pulse">
+            <div class="h-8 w-1/3 bg-gray-300 rounded"></div>
+          </div>
+        </div>
+
+      <div v-else>
         <div v-for="quiz in quizzes.filter(q => q.level === level.key)" :key="quiz.id" class="mt-5">
           <NuxtLink
             :to="`/quiz/${quiz.id}`"
@@ -21,6 +28,7 @@
           </NuxtLink>
         </div>
       </div>
+      </div>
     </div>
   </LandingContainer>
 </template>
@@ -30,7 +38,7 @@ definePageMeta({
   layout: "landing"
 })
 
-const { data: quizzes } = await useFetch('/api/GetAllQuiz')
+const {status, data: quizzes } = await useLazyFetch('/api/GetAllQuiz')
 
 const quizLevels = [
   { key: 'Easy', title: 'General Culture - Easy', description: 'Ideal for testing your basic knowledge without taking too much on the chin.' },
