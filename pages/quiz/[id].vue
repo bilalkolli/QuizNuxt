@@ -44,7 +44,7 @@
         <p class="mb-4">Your score is: <span class="font-semibold text-blue-600">{{ score }}</span></p>
         <p class="mb-6">Thank you for participating!</p>
         <button @click="closePopup" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">
-          Close
+          New Quiz
         </button>
       </div>
     </div>
@@ -53,7 +53,6 @@
 
 <script setup>
 import { useRoute } from 'vue-router'
-import { useFetch } from '#app'
 import { ref } from 'vue'
 
 definePageMeta({
@@ -106,7 +105,7 @@ function submitQuiz() {
 }
 
 function closePopup() {
-  showPopup.value = false
+  navigateTo('/Quizes')
 }
 </script>
 
